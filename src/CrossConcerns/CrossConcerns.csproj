@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>OpenCqrsCli.CrossConcerns</RootNamespace>
+    <AssemblyName>OpenCqrsCli.CrossConcerns</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenCqrs" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>
