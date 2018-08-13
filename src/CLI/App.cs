@@ -28,18 +28,43 @@ namespace OpenCqrsCli
         {
             _logger.Info("Program run started!");
 
+            Commands.ProductCatalog.CreateCommand newProductCatalogCommand;
+
+            newProductCatalogCommand = new Commands.ProductCatalog.CreateCommand
+            {
+                Name = "catalog1",
+            };
+
+            await _dispatcher.SendAndPublishAsync(newProductCatalogCommand);
+
+            int newCatalogId = newProductCatalogCommand.PostExecutionEvent.ProductCatalogId;
+
+            Commands.ProductCategory.CreateCommand newProductCategoryCommand;
+
+            newProductCategoryCommand = new Commands.ProductCategory.CreateCommand
+            {
+                Name = "category1",
+                ProductCatalogId = newCatalogId
+            };
+
+            await _dispatcher.SendAndPublishAsync(newProductCategoryCommand);
+
+            int newCategoryId = newProductCategoryCommand.PostExecutionEvent.ProductCategoryId;
+
             Commands.Product.CreateCommand newProductCommand;
 
             newProductCommand = new Commands.Product.CreateCommand
             {
-                Name = "demo1"
+                Name = "product1",
+                ProductCategoryId = newCategoryId
             };
            
             await _dispatcher.SendAndPublishAsync(newProductCommand);
 
             newProductCommand = new Commands.Product.CreateCommand
             {
-                Name = null
+                Name = null,
+                ProductCategoryId = newCategoryId
             };
 
             await _dispatcher.SendAndPublishAsync(newProductCommand);
@@ -55,6 +80,10 @@ namespace OpenCqrsCli
             }          
 
              _logger.Info("Program run completed successfully!");
+
+            var allProducts = _products.GetAll();
+
+            _logger.Info(string.Format("Found {0} products saved on the database.", allProducts.Count()));
 
             await Task.CompletedTask;
         }

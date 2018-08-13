@@ -45,8 +45,10 @@ namespace OpenCqrsCli
             services.AddScoped<IResolver, CustomResolver>();        
 
             // Add services and repositories
-            services.AddTransient<Repositories.IRepository<Models.Product>, OpenCqrsCli.Repositories.ProductsRepository>();
-            
+            services.AddTransient<Repositories.IRepository<Models.Product>, Repositories.ProductsRepository>();
+            services.AddTransient<Repositories.IRepository<Models.ProductCatalog>, Repositories.ProductCatalogsRepository>();
+            services.AddTransient<Repositories.IRepository<Models.ProductCategory>, Repositories.ProductCategoriesRepository>();
+
             // add app
             services.AddTransient<App>();
         }

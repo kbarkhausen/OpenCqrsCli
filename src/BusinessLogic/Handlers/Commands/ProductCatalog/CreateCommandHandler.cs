@@ -5,23 +5,23 @@ using AutoMapper;
 using OpenCqrs;
 using OpenCqrs.Commands;
 using OpenCqrs.Events;
-using OpenCqrsCli.Commands.Product;
+using OpenCqrsCli.Commands.ProductCatalog;
 using OpenCqrsCli.CrossConcerns.Logging;
 using OpenCqrsCli.Repositories;
 
-namespace OpenCqrsCli.Handlers.Commands.Product
+namespace OpenCqrsCli.Handlers.Commands.ProductCatalog
 {
     public class CreateCommandHandler : ICommandHandlerWithEventsAsync<CreateCommand>
     {
         private ILogger _logger;
         private IDispatcher _dispatcher;
-        private IRepository<Models.Product> _repository;
+        private IRepository<Models.ProductCatalog> _repository;
         private List<IEvent> PostEvents = new List<IEvent>();
 
         public CreateCommandHandler(
             ILoggerFactory loggerFactory,
             IDispatcher dispatcher,
-            IRepository<Models.Product> repository)
+            IRepository<Models.ProductCatalog> repository)
         {
             _logger = loggerFactory.GetLogger(this);
             _dispatcher = dispatcher;
@@ -31,11 +31,11 @@ namespace OpenCqrsCli.Handlers.Commands.Product
         public async Task<IEnumerable<IEvent>> HandleAsync(CreateCommand command)
         {
 
-            _logger.Info("Started adding a new product to the catalog");
+            _logger.Info("Started adding a new product catalog");
 
             try
             {
-                _dispatcher.Publish(Mapper.Map<OpenCqrsCli.Events.Product.CreatingEvent>(command));
+                _dispatcher.Publish(Mapper.Map<OpenCqrsCli.Events.ProductCatalog.CreatingEvent>(command));
             }
             catch (Exception ex)
             {
@@ -45,15 +45,15 @@ namespace OpenCqrsCli.Handlers.Commands.Product
 
             await Task.CompletedTask;
 
-            var entity = Mapper.Map<OpenCqrsCli.Models.Product>(command);
-
+            var entity = Mapper.Map<OpenCqrsCli.Models.ProductCatalog>(command);
+            entity.ProductCatalogId = 45;
             _repository.Add(entity);
          
-            command.PostExecutionEvent = Mapper.Map<OpenCqrsCli.Events.Product.CreatedEvent>(entity);
+            command.PostExecutionEvent = Mapper.Map<OpenCqrsCli.Events.ProductCatalog.CreatedEvent>(entity);
 
             PostEvents.Add(command.PostExecutionEvent);
 
-            _logger.Info("Completed adding a new product to the catalog");
+            _logger.Info("Completed adding a new product catalog");
 
             return PostEvents;
         }

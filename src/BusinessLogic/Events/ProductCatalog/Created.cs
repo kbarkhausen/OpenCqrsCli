@@ -1,10 +1,10 @@
 ﻿using OpenCqrs.Events;
 
-namespace OpenCqrsCli.Events.Product
+namespace OpenCqrsCli.Events.ProductCatalog
 {
     public class CreatedEvent : IEvent
     {
-        public int Id { get; set; }
+        public int ProductCatalogId { get; set; }
         public string Name { get; set; }
     }
 }

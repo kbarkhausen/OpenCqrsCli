@@ -1,8 +1,9 @@
 ﻿using OpenCqrs.Events;
 using OpenCqrsCli.CrossConcerns.Logging;
+using OpenCqrsCli.Events.Product;
 using System;
 
-namespace OpenCqrsCli.Events.Product.CreatingEventHandlers
+namespace OpenCqrsCli.Tests.Handlers.Events.Product.CreatingEventHandlers
 {
     public class ValidateName : IEventHandler<CreatingEvent>
     {

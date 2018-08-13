@@ -24,7 +24,7 @@ namespace OpenCqrsCli.Tests.Handlers.Commands.Product
         {
             _mockLogger = new Mock<ILogger>();
             _mockLoggerFactory = new Mock<ILoggerFactory>();
-            _mockLoggerFactory.Setup(x => x.GetLogger(It.IsAny<string>())).Returns(_mockLogger.Object);
+            _mockLoggerFactory.Setup(x => x.GetLogger(It.IsAny<object>())).Returns(_mockLogger.Object);
 
             _mockDispatcher = new Mock<IDispatcher>();
             _mockProductRepository = new Mock<IRepository<Models.Product>>();
@@ -36,16 +36,22 @@ namespace OpenCqrsCli.Tests.Handlers.Commands.Product
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void HandleAsync_ValidCommand_Ok()
         {
             _mockDispatcher.Setup(x => x.Publish(It.IsAny<OpenCqrsCli.Events.Product.CreatingEvent>()));
             var data = new List<Models.Product>();
             _mockProductRepository.Setup(x => x.GetAll()).Returns(data);
 
-            // _sut.HandleAync(); <--- How to test this???
+            // Mapper initialize???
+
+            var command = new OpenCqrsCli.Commands.Product.CreateCommand { };
+            var result = _sut.HandleAsync(command).Result;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(typeof(System.Threading.Tasks.Task<IEnumerable<OpenCqrs.Events.IEvent>>), result.GetType());
 
             _mockDispatcher.VerifyAll();
-            _mockProductRepository.VerifyAll();            
+            _mockProductRepository.VerifyAll();
         }
     }
 }
